@@ -102,5 +102,10 @@ public class ClienteVo {
 	public void setDNI(String dni) {
 		DNI = dni;
 	}
+	
+	@Override  // representacion en texto del obj
+	public String toString() {
+		return nombre+" "+apellido;
+	}
 
 }

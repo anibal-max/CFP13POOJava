@@ -23,9 +23,11 @@ public class Conn {
 			Class.forName("com.mysql.jdbc.Driver");
 			//obtenemos la conexión
 			conn = DriverManager.getConnection(url,login,password);
+			System.out.println("Conexion a BD Exitosa");
 
 		} catch(Exception e) {
 			System.out.println(e);
+			System.out.println("No se pudo conectar con la BD");
 		}
 	}
 

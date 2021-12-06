@@ -4,7 +4,6 @@ package ventanas;
 import java.awt.AWTException;
 import java.awt.event.ActionEvent;
 
-
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
@@ -20,6 +19,7 @@ import dao.ClienteDao;
 import vo.ArticuloVo;
 import vo.ClienteVo;
 
+
 public class Clientes extends JFrame implements ActionListener {
 	
 	private ClienteDao cliente;
@@ -32,67 +32,82 @@ public class Clientes extends JFrame implements ActionListener {
 	
 	private JLabel empty;
 	
-	private JTextField tfCodCliente, tfNomCliente, tfApeCliente;
-	private JTextField tfDirCliente, tfLocCliente, tfProvCliente;
-	private JTextField tfCpCliente, tfTelCliente, tfDniCliente;
+	private JTextField tfCodCliente = new JTextField();
+	private JTextField tfNomCliente = new JTextField();
+	private JTextField tfApeCliente = new JTextField();
+	private JTextField tfDirCliente = new JTextField(); 
+	private JTextField tfLocCliente = new JTextField();
+	private JTextField tfProvCliente = new JTextField();
+	private JTextField tfTelCliente = new JTextField();
+	private JTextField tfDniCliente = new JTextField();
+	private JTextField tfCpCliente = new JTextField();
 	
-	private JButton btnRegistrar, btnCancelar;
+	private JButton btnRegistrar = new JButton();
+	private JButton btnCancelar = new JButton();
 	
-	JTable tabla1;
-	JScrollPane barra1;
+	JTable tabla1; //= new JTable();
+	JScrollPane barra1;// = new JScrollPane();
 
 	public Clientes() {
 		cliente = new ClienteDao();
 		
-		abrirVentana();
+		iniciarVentana();
 		this.revalidate();
-		clearTf();
+		
 		
 		// TODO Auto-generated constructor stub
 	}
 	
 	
 	
-	private void abrirVentana() {
-		createNewJButton(btnRegistrar, "Guardar", 130, 240, 100, 30);
+	private void iniciarVentana() {
+		
+		
+		createNewJButton(btnRegistrar,"Guardar", 130, 240, 100, 30);		
 		createNewJButton(btnCancelar, "Cancelar", 240, 240, 100, 30);
-		
-		setSize(480, 650);
-		setTitle("TABLA CLIENTES");
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setLayout(null);
-		
+				
 		createNewJLabelTitle(lblTitulo, "REGISTRO DE CLIENTES", 120, 20, 380, 30, "Verdana", 1, 18);
 		
 		createNewJLabel(lblCodCliente, "Codigo", 20, 80, 80, 15);
 		createNewJLabel(lblNomCliente, "Nombre", 20, 110, 80, 15);
 		createNewJLabel(lblApeCliente, "Apellido", 20, 140, 80, 15);
 		createNewJLabel(lblTelCliente, "Teléfono", 20, 170, 80, 15);
-		createNewJLabel(lblDniCliente, "DNI", 20, 200, 80, 15);
+		createNewJLabel(lblDniCliente, "DNI", 20, 200, 80, 15);		
 		
-		createNewJTextField(tfCodCliente, 85, 76, 100, 25);
-		createNewJTextField(tfNomCliente, 85, 106, 100, 25);
+		createNewJTextField(tfCodCliente, 85, 76, 100, 25);		
+		createNewJTextField(tfNomCliente, 85, 106, 100, 25);		
 		createNewJTextField(tfApeCliente, 85, 136, 100, 25);
-		createNewJTextField(tfTelCliente, 85, 166, 100, 25);
+		createNewJTextField(tfTelCliente, 85, 166, 100, 25);	
 		createNewJTextField(tfDniCliente, 85, 196, 100, 25);
-		
+			
 		createNewJLabel(lblDirCliente, "Direccion", 220, 110, 80, 15);
 		createNewJLabel(lblLocCliente, "Localidad", 220, 140, 80, 15);
 		createNewJLabel(lblProvCliente, "Provincia", 220, 170, 80, 15);
 		createNewJLabel(lblCpCliente, "Codigo Postal", 220, 200, 80, 15);
 		
-		createNewJTextField(tfDirCliente, 315, 106, 100, 25);
-		createNewJTextField(tfLocCliente, 315, 136, 100, 25);
-		createNewJTextField(tfProvCliente, 315, 166, 100, 25);
+		createNewJTextField(tfDirCliente,315, 106, 100, 25);		
+		createNewJTextField(tfLocCliente,315, 136, 100, 25);		
+		createNewJTextField(tfProvCliente, 315, 166, 100, 25);				
 		createNewJTextField(tfCpCliente, 315, 196, 100, 25);
 		
 		
 		
-		createNewJLabel(empty, "", 0, 360, 1, 1);		
+		barra1 = new JScrollPane();
+		barra1.setBounds(40, 300, 400, 100);
+
+		crearTabla();
 		
+		add(barra1);
+
 		
+		createNewJLabel(empty, "", 0, 645, 1, 1);
 		
+		setSize(480, 650);
+		setTitle("TABLA CLIENTES");
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setLayout(null);		
+				
 	}
 	
 	public void createNewJLabel(JLabel name, String text, int x, int y, int wdt, int hgt) {
@@ -112,17 +127,15 @@ public class Clientes extends JFrame implements ActionListener {
 	}
 	
 	public void createNewJTextField(JTextField name, int x, int y, int wdt, int hgt) {
-		name = new JTextField();
+		//name = new JTextField();
 		name.setBounds(x, y, wdt, hgt);
 		name.setText("");	
-		add(name);
-		
-			
+		add(name);			
 		//Metodo para crear nuevos campos de texto de forma mas práctica
 	}
 	
 	public void createNewJButton(JButton name, String text, int x, int y, int wdt, int hgt) {
-		name = new JButton();
+		//name = new JButton();
 		name.setText(text);
 		name.setBounds(x, y, wdt, hgt);
 		add(name);
@@ -130,47 +143,33 @@ public class Clientes extends JFrame implements ActionListener {
 		//Metodo para crear nuevos botones de forma mas práctica
 	}
 	
-	
-	
-	/*@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if (e.getSource() == botonGuardar) {
-
-			try {
-				ArticuloVo miArticulo = new ArticuloVo();
-				miArticulo.setIdCodigoArt(Integer.parseInt(textCod.getText()));
-				miArticulo.setNombreArt(textNombre.getText());
-				miArticulo.setPrecioArt(Double.parseDouble(textPrecio.getText()));
-				miArticulo.setFabricanteCodArt(Integer.parseInt(textFabricante.getText()));
-				miArticulo.setStockArt(Integer.parseInt(textStock.getText()));
-
-
-
-
-
-
-
-				miArticuloDao.registrarArticulo(miArticulo);
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(null,
-						"Error en el Ingreso de Datos", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} finally {
-			*/
-				/* Actualizamos siempre las tablas despues del registro */
-		/*		mostrarDatosUsandoLogica1();
-				limpiar();
-			}
-		} */
-	/*
-		if (e.getSource() == btnRegistrar) {
-			
+	public void crearTabla() {
+		
+		String titulos[] = {"Codigo", "Nombre", "Apellido", "Direccion", "Localidad", "Provincia", "CP", "Telefono", "DNI"};
+		ArrayList<ClienteVo> listaClientes = cliente.listarClientes();
+		String informacion[][] = new String[listaClientes.size()][titulos.length];
+		
+		for(int i = 0; i < informacion.length; i++) {
+			informacion[i][0] = listaClientes.get(i).getCodcliente() + "";
+			informacion[i][1] = listaClientes.get(i).getNombre() + "";
+			informacion[i][2] = listaClientes.get(i).getApellido() + "";
+			informacion[i][3] = listaClientes.get(i).getDireccion() + "";
+			informacion[i][4] = listaClientes.get(i).getLocalidad() + "";
+			informacion[i][5] = listaClientes.get(i).getProvincia() + "";
+			informacion[i][6] = listaClientes.get(i).getCod_postal() + "";
+			informacion[i][7] = listaClientes.get(i).getTelefono() + "";
+			informacion[i][8] = listaClientes.get(i).getDNI() + "";			
 		}
-			if (e.getSource() == btnCancelar) {
-				clearTf();
-			}
-	}*/
+		
+		
+		tabla1 = new JTable(informacion, titulos);
+		tabla1.setEnabled(false);
+		tabla1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		barra1.setViewportView(tabla1);
+				
+	}
+	
+
 	
 	private void clearTf() {
 		//System.out.print(tfCodCliente.getText());
@@ -194,6 +193,33 @@ public class Clientes extends JFrame implements ActionListener {
 		if (e.getSource() == btnCancelar) {
 			clearTf();
 		}
+		if (e.getSource() == btnRegistrar) {
+
+			try {
+				ClienteVo clienteNuevo = new ClienteVo();
+				clienteNuevo.setCodcliente(Integer.parseInt(tfCodCliente.getText()));
+				clienteNuevo.setNombre(tfNomCliente.getText());
+				clienteNuevo.setApellido(tfApeCliente.getText());
+				clienteNuevo.setDNI(tfDniCliente.getText());
+				clienteNuevo.setDireccion(tfDirCliente.getText());
+				clienteNuevo.setTelefono(tfTelCliente.getText());
+				clienteNuevo.setLocalidad(tfLocCliente.getText());
+				clienteNuevo.setProvincia(tfProvCliente.getText());
+				clienteNuevo.setCod_postal(tfCpCliente.getText());
+				
+
+				cliente.registrarCliente(clienteNuevo);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null,
+						"Error en el Ingreso de Datos", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} finally {
+			
+				/* Actualizamos siempre las tablas despues del registro */
+				crearTabla();
+				clearTf();
+			}
+		} 
 		
 	}
 

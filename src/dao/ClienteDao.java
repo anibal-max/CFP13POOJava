@@ -52,11 +52,11 @@ public class ClienteDao {
 		ClienteVo cliente;
 		try {
 			Statement st = conex.getConexion().createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM Fabricantes");
+			ResultSet rs = st.executeQuery("SELECT * FROM clientes");
 			
 			while(rs.next()) {
 				cliente = new ClienteVo();
-				cliente.setCodcliente(Integer.parseInt(rs.getString("codcliente")));
+				cliente.setCodcliente(rs.getInt("codcliente"));
 				cliente.setNombre(rs.getString("nombre"));
 				cliente.setApellido(rs.getString("apellido"));
 				cliente.setDireccion(rs.getString("direccion"));
@@ -73,7 +73,9 @@ public class ClienteDao {
 		}
 		
 		catch (SQLException e){
+			System.out.println("Error de consulta");
 			System.out.println(e.getMessage());
+			
 			JOptionPane.showMessageDialog(null, "Error al consultar", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}

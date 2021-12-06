@@ -89,7 +89,7 @@ public class ArticuloDao {
 	 * @param documento 
 	 * @return
 	 */
-	public ArrayList< ArticuloVo> consultarArticulo(int codigo) {
+	public ArrayList<ArticuloVo> consultarArticulo(int codigo) {
 		ArrayList< ArticuloVo> miEmpleado = new ArrayList< ArticuloVo>();
 
 		try {
@@ -115,6 +115,25 @@ public class ArticuloDao {
 			JOptionPane.showMessageDialog(null, "no se pudo consultar el Articulo\n"+e);
 		}
 		return miEmpleado;
+	}
+	
+	public void venderArticulo(int codArt, int cantidad) {
+		try {
+			PreparedStatement estatuto = conex.getConexion().prepareStatement("UPDATE articulos SET stock = ? WHERE codigo = ?");
+			estatuto.setInt(1, cantidad);
+			estatuto.setInt(2, codArt);
+			estatuto.executeUpdate();
+			JOptionPane.showMessageDialog(null,
+					"Se ha registrado Exitosamente", "Información",
+					JOptionPane.INFORMATION_MESSAGE);
+			estatuto.close();
+
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(null,
+					"No se Registro, verifique la consola para ver el error",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 }
