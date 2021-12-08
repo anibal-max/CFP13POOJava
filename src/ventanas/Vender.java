@@ -4,23 +4,29 @@ import javax.swing.*;
 
 import vo.ArticuloVo;
 import vo.ClienteVo;
+import vo.VentasVo;
 
 import java.sql.Statement;
 
 import conexion.Conn;
 import dao.ArticuloDao;
 import dao.ClienteDao;
+import dao.VentasDao;
 
 import java.awt.Color;
 import java.awt.event.*;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
+
+import java.text.SimpleDateFormat;  
+import java.util.Date;
 
 
 public class Vender extends JFrame implements ItemListener, ActionListener{
 
 	private ArticuloDao miArticuloDao;
 	private ClienteDao miClienteDao;
+	private VentasDao miVentaDao = new VentasDao();
 
 	private Conn conex;
 	private JComboBox comboArticulo = new JComboBox();
@@ -40,6 +46,9 @@ public class Vender extends JFrame implements ItemListener, ActionListener{
 	private JButton calcular = new JButton();
 	
 	private JTextField cantidad = new JTextField();
+	
+	private JTable tabla1;
+	private JScrollPane barra1;
 
 	public Vender() {
 		miArticuloDao = new ArticuloDao();
@@ -79,6 +88,11 @@ public class Vender extends JFrame implements ItemListener, ActionListener{
 		createNewJButton(calcular,"CALCULAR", 300, 150, 100, 40);
 		
 		createNewJButton(vender,"VENDER", 120, 210, 80, 40);
+		
+		barra1 = new JScrollPane();
+		barra1.setBounds(40, 265, 320, 100);
+		crearTabla();		
+		add(barra1);
 
 	}
 	
@@ -129,6 +143,27 @@ public class Vender extends JFrame implements ItemListener, ActionListener{
 		//Metodo para crear nuevos campos de texto de forma mas práctica
 	}
 
+public void crearTabla() {
+		
+		String titulos[] = {"clientes_codcliente", "articulos_codigo", "fecha", "unidades"};
+		ArrayList<VentasVo> listaVentas = miVentaDao.mostrarVentas(0);
+		String informacion[][] = new String[listaVentas.size()][titulos.length];
+		
+		for(int i = 0; i < informacion.length; i++) {
+			informacion[i][0] = listaVentas.get(i).getCod_cliente() + "";
+			informacion[i][1] = listaVentas.get(i).getCod_art() + "";
+			informacion[i][2] = listaVentas.get(i).getFecha() + "";
+			informacion[i][3] = listaVentas.get(i).getCantidad() + "";
+					
+		}
+		
+		
+		tabla1 = new JTable(informacion, titulos);
+		tabla1.setEnabled(false);
+		tabla1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		barra1.setViewportView(tabla1);
+				
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -138,16 +173,42 @@ public class Vender extends JFrame implements ItemListener, ActionListener{
 			costoTotal.setText(resultado.toString());
 		}
 		if(e.getSource() == vender) {
+			
+			//Restar articulos vendidos del Stock de Articulos
 			ArticuloDao provisorio = new ArticuloDao();
 			ArticuloVo art = (ArticuloVo)comboArticulo.getSelectedItem();
 			ArrayList<ArticuloVo> artStock = new ArrayList();
 			artStock = provisorio.consultarArticulo(art.getIdCodigoArt());
 			Integer stockActual = artStock.get(0).getStockArt();
+			
 			if(stockActual>=Integer.parseInt(cantidad.getText())) {
 				System.out.println(art.getIdCodigoArt()+" "+Integer.parseInt(cantidad.getText()));
 				provisorio.venderArticulo(art.getIdCodigoArt(), (stockActual-Integer.parseInt(cantidad.getText())));
 				//Actualizar Stock en pantalla
 				stock.setText((Integer.valueOf(stockActual-Integer.parseInt(cantidad.getText()))).toString());
+				//------------------------------------
+				//Agregar transaccion a la tabla compras
+				VentasVo nuevaVenta = new VentasVo();
+				
+				Date date = new Date(); 
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				String strDate= formatter.format(date);
+				
+				Timestamp ts = Timestamp.valueOf(strDate);
+				
+				nuevaVenta.setFecha(ts);
+				System.out.println(ts);
+				nuevaVenta.setCod_cliente(Integer.parseInt(codCliente.getText()));
+				nuevaVenta.setCod_art(art.getIdCodigoArt());
+				nuevaVenta.setCantidad(Integer.parseInt(cantidad.getText()));
+				VentasDao efectuarVenta = new VentasDao();
+				efectuarVenta.venderProducto(nuevaVenta);
+				
+				
+				//Actualizar tabla
+				crearTabla();
+				
+				
 			}
 			else {
 				System.out.println("No hay stock suficiente para realizar la venta");

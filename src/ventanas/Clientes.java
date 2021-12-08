@@ -45,8 +45,8 @@ public class Clientes extends JFrame implements ActionListener {
 	private JButton btnRegistrar = new JButton();
 	private JButton btnCancelar = new JButton();
 	
-	JTable tabla1; //= new JTable();
-	JScrollPane barra1;// = new JScrollPane();
+	private JTable tabla1; //= new JTable();
+	private JScrollPane barra1;// = new JScrollPane();
 
 	public Clientes() {
 		cliente = new ClienteDao();
@@ -90,13 +90,11 @@ public class Clientes extends JFrame implements ActionListener {
 		createNewJTextField(tfProvCliente, 315, 166, 100, 25);				
 		createNewJTextField(tfCpCliente, 315, 196, 100, 25);
 		
-		
+		//Crear y agregar tabla con barra de scroll 
 		
 		barra1 = new JScrollPane();
 		barra1.setBounds(40, 300, 400, 100);
-
-		crearTabla();
-		
+		crearTabla();		
 		add(barra1);
 
 		

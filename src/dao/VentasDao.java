@@ -23,11 +23,11 @@ public class VentasDao {
 	public void venderProducto(VentasVo venta) {
 		try {
 			Statement st = conex.getConexion().createStatement();
-			st.executeUpdate("INSTERT INTO compra VALUES ('"
+			st.executeUpdate("INSERT INTO compra VALUES ('"
 					+ venta.getCod_cliente() + "','"
 					+ venta.getCod_art() + "','"
 					+ venta.getFecha() + "','"
-					+ venta.getCantidad()
+					+ venta.getCantidad() + "')"
 					);
 			JOptionPane.showMessageDialog(null,
 					"Se ha registrado Exitosamente", "Información",
@@ -73,7 +73,7 @@ public class VentasDao {
 		else {
 			try {
 				Statement st = conex.getConexion().createStatement();
-				ResultSet rs = st.executeQuery("SELECT * FROM compra");
+				ResultSet rs = st.executeQuery("SELECT * FROM compra ORDER BY fecha DESC");
 				while(rs.next()) {
 					venta = new VentasVo();
 					venta.setCod_cliente(Integer.parseInt(rs.getString("clientes_codcliente")));

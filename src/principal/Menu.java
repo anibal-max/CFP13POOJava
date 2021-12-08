@@ -2,8 +2,10 @@ package principal;
 
 import javax.swing.*;
 
-
+import ventanas.Clientes;
 import ventanas.Vender;
+import ventanas.VentanaArticulos;
+import ventanas.VentanaFabricantes;
 import vo.ArticuloVo;
 import dao.ArticuloDao;
 
@@ -26,13 +28,13 @@ public class Menu extends JFrame implements ActionListener {
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		boton1=new JButton("Agregar Articulo");
+		boton1=new JButton("Editar Articulos");
 	//	boton1=new JButton("Editar datos de un cliente");
 		boton1.setBounds(30,40,190,30);
 		add(boton1);
 		boton1.addActionListener(this);
 
-		boton2=new JButton("Consultar un Articulo");
+		boton2=new JButton("Editar Clientes");
 		boton2.setBounds(30,100,190,30);
 		add(boton2);
 		boton2.addActionListener(this);
@@ -41,21 +43,36 @@ public class Menu extends JFrame implements ActionListener {
 		boton3.setBounds(30,160,190,30);
 		add(boton3);
 		boton3.addActionListener(this);
+		
+		boton4=new JButton("Editar Fabricantes");
+		boton4.setBounds(30, 220, 190, 30);
+		add(boton4);
+		boton4.addActionListener(this);
 
 
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==boton1) {
-			setTitle("Selecciono opcion 1");
-			modificarArticulo();
+			setTitle("Selecciono opcion 1");			
+			//modificarArticulo();
+			VentanaArticulos miVentana1;
+			miVentana1 = new VentanaArticulos();
+			miVentana1.setBounds(750,80,500,600);
+			miVentana1.setVisible(true);
 		}
 		if (e.getSource()==boton2) {
 			setTitle("Selecciono opcion 2");
+			/*
 
 			int cod=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero" +
 					" de codigo del Articulo"));
 			buscarArticulo(cod);	
+			*/
+			Clientes miVentana3;
+			miVentana3 = new Clientes();
+			miVentana3.setBounds(750,80,500,600);
+			miVentana3.setVisible(true);
 
 		}
 		if (e.getSource()==boton3) {
@@ -67,8 +84,12 @@ public class Menu extends JFrame implements ActionListener {
 			venderform.setVisible(true);
 		}    
 		if (e.getSource()==boton4) {
-			//setTitle("Selecciono opcion 4");
-			System.exit(1);
+			setTitle("Selecciono opcion 4");
+			VentanaFabricantes miVentana2;
+			miVentana2 = new VentanaFabricantes();
+			miVentana2.setBounds(1300,80,500,600);
+			miVentana2.setVisible(true);
+			//System.exit(1);
 		}  
 
 	}

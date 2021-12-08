@@ -1,5 +1,6 @@
 package dao;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,24 +29,54 @@ public class ArticuloDao {
 	 * Usa el objeto enviado para insertar un articulo en tabla desde VentanaArticulos
 	 */
 	public void registrarArticulo(ArticuloVo miArticulo) {
-		try {
-			Statement estatuto = conex.getConexion().createStatement();
-			estatuto.executeUpdate("INSERT INTO articulos VALUES ('"
-					+ miArticulo.getIdCodigoArt() + "', '"
-					+ miArticulo.getNombreArt() + "', '"
-					+ miArticulo.getPrecioArt() + "', '"	
-					+ miArticulo.getFabricanteCodArt() + "', '"
-					+ miArticulo.getStockArt() + "') ");
-			JOptionPane.showMessageDialog(null,
-					"Se ha registrado Exitosamente", "Información",
-					JOptionPane.INFORMATION_MESSAGE);
-			estatuto.close();
+		ArticuloVo miArticuloVo = new ArticuloVo();
+		ArticuloDao miArticuloDao = new ArticuloDao();
+		
+		miArticuloVo = miArticuloDao.consultarArticulo(miArticulo.getIdCodigoArt()).get(0);
+		if(miArticuloVo.getIdCodigoArt()!=null) {
+			//Actualizar el stock si el articulo ya existe
+			try {
+				PreparedStatement estatuto = conex.getConexion().prepareStatement("UPDATE articulos "
+						+ "SET articulos.stock = ?, articulos.precio = ? WHERE codigo = ?");
+				estatuto.setInt(1, (miArticulo.getStockArt() + miArticuloVo.getStockArt()));
+				estatuto.setBigDecimal(2, BigDecimal.valueOf(miArticulo.getPrecioArt()));
+				estatuto.setInt(3, miArticuloVo.getIdCodigoArt());
+				estatuto.executeUpdate();
+				
+				JOptionPane.showMessageDialog(null,
+						"Se ha registrado Exitosamente", "Información",
+						JOptionPane.INFORMATION_MESSAGE);
+				estatuto.close();
 
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			JOptionPane.showMessageDialog(null,
-					"No se Registro, verifique la consola para ver el error",
-					"Error", JOptionPane.ERROR_MESSAGE);
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				JOptionPane.showMessageDialog(null,
+						"No se Registro, verifique la consola para ver el error",
+						"Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		
+		else {		
+			//crear el articulo si no existe
+			try {
+				Statement estatuto = conex.getConexion().createStatement();
+				estatuto.executeUpdate("INSERT INTO articulos VALUES ('"
+						+ miArticulo.getIdCodigoArt() + "', '"
+						+ miArticulo.getNombreArt() + "', '"
+						+ miArticulo.getPrecioArt() + "', '"	
+						+ miArticulo.getFabricanteCodArt() + "', '"
+						+ miArticulo.getStockArt() + "') ");
+				JOptionPane.showMessageDialog(null,
+						"Se ha registrado Exitosamente", "Información",
+						JOptionPane.INFORMATION_MESSAGE);
+				estatuto.close();
+	
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				JOptionPane.showMessageDialog(null,
+						"No se Registro, verifique la consola para ver el error",
+						"Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
